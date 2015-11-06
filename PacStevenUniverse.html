@@ -142,8 +142,7 @@
 			  }
 			  
 			  //only move if not touching wall
-			  var col = nick.x / cellWidth;
-			  var row = nick.y / cellHeight; 
+			  
 			  if(!paused){
 			  	nick.moveNick(dir);
 			  }
@@ -174,6 +173,9 @@
 			}
 			void moveNick(dir){
 			
+				var col = x / cellWidth;
+			  	var row = y / cellHeight; 
+				
 				//portals
 				if(x > maze[0].length * cellWidth){
 					x-= maze[0].length * cellWidth;
@@ -184,6 +186,8 @@
 				}else if(y<0){
 					y += maze.length* cellHeight;
 				}
+				
+				//don't move until you know the next space is empty
 				if (dir == "up"){
 					y = y+s;
 				}else if (dir == "down"){
