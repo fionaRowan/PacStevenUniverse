@@ -8,6 +8,7 @@
 		var width = 800;
 		var height = 500;
 		var dir = "right"; 
+		var paused = true;
 		Nick nick;
 		
 		var levels = [//1 = wall, 0 = space 20 rows / columns
@@ -143,9 +144,9 @@
 			  //only move if not touching wall
 			  var col = nick.x / cellWidth;
 			  var row = nick.y / cellHeight; 
-			  //if(maze[row][col] == 0){
+			  if(!paused){
 			  	nick.moveNick(dir);
-			  //}
+			  }
 			  
 			  
 
@@ -195,6 +196,9 @@
 			}
 		
 		
+		}
+		mouseClicked = function(){
+			paused = !paused; 
 		}
 
 		
