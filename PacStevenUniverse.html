@@ -92,7 +92,7 @@
 			  //noLoop();
 			  PFont fontA = loadFont("courier");
 			  textFont(fontA, 14); 
-			  nick = new Nick(10, 10, 10, 10, 1); 
+			  nick = new Nick(10, 10, 30, 30, 1); 
 
 			  
 			}
@@ -139,7 +139,14 @@
 			  	}
 			  	
 			  }
-			  nick.moveNick(dir);
+			  
+			  //only move if not touching wall
+			  var col = nick.x / cellWidth;
+			  var row = nick.y / cellHeight; 
+			  //if(maze[row][col] == 0){
+			  	nick.moveNick(dir);
+			  //}
+			  
 			  
 
 			  
@@ -165,6 +172,17 @@
 			  	ellipse(x,y,nWidth,nHeight);
 			}
 			void moveNick(dir){
+			
+				//portals
+				if(x > maze[0].length * cellWidth){
+					x-= maze[0].length * cellWidth;
+				}else if(x < 0){
+					x+=maze[0].length *cellWidth;
+				}else if(y > maze.length * cellHeight){
+					y -= maze.length *cellHeight;
+				}else if(y<0){
+					y += maze.length* cellHeight;
+				}
 				if (dir == "up"){
 					y = y+s;
 				}else if (dir == "down"){
