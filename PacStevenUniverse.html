@@ -7,7 +7,7 @@
 		//screen dimensions
 		var width = 800;
 		var height = 500;
-		var dir = "right"; 
+		var dir = "down"; 
 		var paused = true;
 		Nick nick;
 		
@@ -78,7 +78,7 @@
 			];
 		
 		//first level is initialized to first	
-		var maze = levels[0]; 
+		var maze;// = levels[0]; 
 		
 		//cell width and cell height
 		var cellWidth = 20;
@@ -94,6 +94,7 @@
 			  PFont fontA = loadFont("courier");
 			  textFont(fontA, 14); 
 			  nick = new Nick(10, 10, 30, 30, 1); 
+			  maze = levels[0];
 
 			  
 			}
@@ -133,9 +134,9 @@
 			  		dir = "right";
 			  	}else if (keyCode == 37){
 			  		dir = "left";
-			  	}else if(keyCode == 40){
-			  		dir = "up";
 			  	}else if(keyCode == 38){
+			  		dir = "up";
+			  	}else if(keyCode == 40){
 			  		dir = "down";
 			  	}
 			  	
@@ -143,7 +144,7 @@
 			  
 			  //only move if not touching wall
 			  
-			  if(!paused){
+			  if(!paused && canMove(nick.x, nick.y, dir, maze)){
 			  	nick.moveNick(dir);
 			  }
 			  
@@ -153,12 +154,38 @@
 
 		}
 		
+		function canMove(x, y, dir, maze){
+				var canMove = false;
+			
+				var col = Math.floor(x / 20); //cellWidth;
+			  	var row = Math.floor(y / 20); //cellHeight; 
+			  	if(dir =="down" && row+1 < 20){
+			  		if(maze[row+1][col] == 0)
+			  			canMove = true;
+			  	}
+			  	if(dir == "up" && row-1 >=0){
+			  		if(maze[row-1][col] == 0)
+			  			canMove = true;
+			  	}
+			  	if(dir == "left" && col -1 >=0){
+			  		if(maze[row][col-1] == 0)
+			  			canMove = true;
+			  	}
+			  	if(dir == "right" && col+1 <20){
+			  		if(maze[row][col+1] == 0)
+			  			canMove = true;
+			  	}
+			  	
+				return canMove;
+		}
+		
 		class Nick{
 			var nWidth;
 			var nHeight; 
 			var x;
 			var y;
 			var s;
+			
 			Nick(w,h,xVal, yVal, speed){
 				nWidth = w;
 				nHeight = h;
@@ -171,13 +198,18 @@
 				fill(0,255,0);
 			  	ellipse(x,y,nWidth,nHeight);
 			}
+			//called before moveNick 
+			/*
+			void canMove(dir){
+				
+			}
+			*/
 			void moveNick(dir){
 			
-				var col = x / cellWidth;
-			  	var row = y / cellHeight; 
+				
 				
 				//portals
-				if(x > maze[0].length * cellWidth){
+				if(x > maze[0].length * cellWidth ){
 					x-= maze[0].length * cellWidth;
 				}else if(x < 0){
 					x+=maze[0].length *cellWidth;
@@ -189,9 +221,9 @@
 				
 				//don't move until you know the next space is empty
 				if (dir == "up"){
-					y = y+s;
+					y = y-s;
 				}else if (dir == "down"){
-					y = y -s;
+					y = y +s;
 				}else if (dir == "left"){
 					x = x -s; 
 				}else if(dir == "right"){
