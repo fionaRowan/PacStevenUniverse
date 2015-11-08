@@ -10,27 +10,30 @@
 		var dir = "down"; 
 		var paused = true;
 		Nick nick;
+		Enemy enemy;
+		
+		var pointCounter = 0;
 		
 		var levels = [//1 = wall, 0 = space 20 rows / columns
 			[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-			[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-			[1,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,0,1],
-			[1,0,1,1,0,1,1,1,0,1,1,0,1,1,1,0,1,1,0,1],
-			[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-			[1,0,1,1,0,0,0,1,1,1,1,1,1,0,0,0,1,1,0,1],
-			[0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0],
-			[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
-			[1,1,1,1,0,0,1,1,1,1,0,1,1,1,0,0,1,1,1,1],
-			[1,1,1,1,0,0,1,0,0,0,0,0,0,1,0,0,1,1,1,1],
-			[1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,0,1,1,1,1],
-			[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
-			[1,1,1,1,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,1],
-			[0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0],
-			[1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1],
-			[1,0,1,1,0,1,1,1,1,0,0,1,1,1,1,0,1,1,0,1],
-			[1,0,1,1,0,1,0,0,0,0,0,0,0,0,1,0,1,1,0,1],
-			[1,0,1,1,0,1,0,1,1,1,1,1,1,0,1,0,1,1,0,1],
-			[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+			[1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+			[1,2,1,1,2,1,1,1,2,1,1,2,1,1,1,2,1,1,2,1],
+			[1,2,1,1,2,1,1,1,2,1,1,2,1,1,1,2,1,1,2,1],
+			[1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
+			[1,2,1,1,2,2,2,1,1,1,1,1,1,2,2,2,1,1,2,1],
+			[0,2,2,2,2,2,2,2,2,1,1,2,2,2,2,2,2,2,2,0],
+			[1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1],
+			[1,1,1,1,2,2,1,1,1,1,2,1,1,1,2,2,1,1,1,1],
+			[1,1,1,1,2,2,1,2,2,2,2,2,2,1,2,2,1,1,1,1],
+			[1,1,1,1,2,2,1,1,1,1,1,1,1,1,2,2,1,1,1,1],
+			[1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,1,1],
+			[1,1,1,1,2,2,2,2,2,1,1,2,2,2,2,2,1,1,1,1],
+			[0,2,2,2,2,2,2,1,1,1,1,1,1,2,2,2,2,2,2,0],
+			[1,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,1,1,2,1],
+			[1,2,1,1,2,1,1,1,1,2,2,1,1,1,1,2,1,1,2,1],
+			[1,2,1,1,2,1,2,2,2,2,2,2,2,2,1,2,1,1,2,1],
+			[1,2,1,1,2,1,2,1,1,1,1,1,1,2,1,2,1,1,2,1],
+			[1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,1],
 			[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]], 
 			
 			[[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -94,6 +97,7 @@
 			  PFont fontA = loadFont("courier");
 			  textFont(fontA, 14); 
 			  nick = new Nick(10, 10, 30, 30, 1); 
+			  enemy = new Enemy(10, 10, 30, 30, 1); 
 			  maze = levels[0];
 
 			  
@@ -110,11 +114,17 @@
 					//draw every cell
 					var x = cellWidth * j;
 					var y = cellHeight *i;
-					if(maze[i][j] == 0){
+					if(maze[i][j] == 0 || maze[i][j] == 2){
 						//is space
 						noStroke();
 						fill(255, 0,0);
 						rect(x, y, cellWidth, cellHeight); 
+						if(maze[i][j] == 2){
+							fill(255,255,255);
+							ellipse(x+10,y+10, 10, 10);
+						
+						}
+						
 					}else if(maze[i][j] == 1){
 						//is wall
 						noStroke();
@@ -127,6 +137,9 @@
 			  }
 			  
 			  nick.drawNick();
+			  enemy.drawEnemy();
+			  enemy.moveEnemy();
+			  console.log(pointCounter);
 			  
 			  //detect key,and decide direction
 			  if(keyPressed==true){
@@ -144,8 +157,11 @@
 			  
 			  //only move if not touching wall
 			  
-			  if(!paused && canMove(nick.x, nick.y, dir, maze)){
+			  if(!paused && nick.canMove(dir)){
 			  	nick.moveNick(dir);
+			  }
+			  if(pointCounter==193){
+			  	maze = levels[1];
 			  }
 			  
 			  
@@ -154,30 +170,6 @@
 
 		}
 		
-		function canMove(x, y, dir, maze){
-				var canMove = false;
-			
-				var col = Math.floor(x / 20); //cellWidth;
-			  	var row = Math.floor(y / 20); //cellHeight; 
-			  	if(dir =="down" && row+1 < 20){
-			  		if(maze[row+1][col] == 0)
-			  			canMove = true;
-			  	}
-			  	if(dir == "up" && row-1 >=0){
-			  		if(maze[row-1][col] == 0)
-			  			canMove = true;
-			  	}
-			  	if(dir == "left" && col -1 >=0){
-			  		if(maze[row][col-1] == 0)
-			  			canMove = true;
-			  	}
-			  	if(dir == "right" && col+1 <20){
-			  		if(maze[row][col+1] == 0)
-			  			canMove = true;
-			  	}
-			  	
-				return canMove;
-		}
 		
 		class Nick{
 			var nWidth;
@@ -199,11 +191,55 @@
 			  	ellipse(x,y,nWidth,nHeight);
 			}
 			//called before moveNick 
-			/*
-			void canMove(dir){
+			
+			boolean canMove(dir){
+				var canMove = false;
+			
+				var col = Math.floor(x / 20); //cellWidth;
+			  	var row = Math.floor(y / 20); //cellHeight; 
+			  	if(dir =="down" && row+1 < 20){
+			  		if(maze[row+1][col] == 0 || maze[row+1][col] == 2){
+			  			canMove = true;
+			  			if(maze[row+1][col] == 2){
+			  				pointCounter++;
+			  				maze[row+1][col] = 0;
+			  			}
+			  		}
+			  			
+			  	}
+			  	if(dir == "up" && row-1 >=0){
+			  		if(maze[row-1][col] == 0 || maze[row-1][col] == 2){
+			  			canMove = true;
+			  			if(maze[row-1][col] == 2){
+			  				pointCounter++;
+			  				maze[row-1][col] =0;
+			  			}
+			  		}
+			  	}
+			  	if(dir == "left" && col -1 >=0 ){
+			  		if(maze[row][col-1] == 0 || maze[row][col-1] == 2){
+			  			canMove = true;
+			  			if(maze[row][col-1] == 2){
+			  				pointCounter++;
+			  				maze[row][col-1] =0;
+			  			}
+			  		}
+			  	}
+			  	if(dir == "right" && col+1 <20){
+			  		if(maze[row][col+1] == 0 || maze[row][col+1] == 2){
+			  			canMove = true;
+			  			if(maze[row][col+1] == 2){
+			  				pointCounter++;
+			  				maze[row][col+1] = 0;
+			  			}
+			  		}
+			  	}
+			  	
+				return canMove;
+		
 				
 			}
-			*/
+			
 			void moveNick(dir){
 			
 				
@@ -233,9 +269,107 @@
 		
 		
 		}
+		class Enemy{
+		
+			var nWidth;
+			var nHeight; 
+			var x;
+			var y;
+			var s;
+			var dir;
+			
+			Enemy(w,h,xVal, yVal, speed){
+				nWidth = w;
+				nHeight = h;
+				x = xVal;
+				y=yVal;
+				s = speed;
+				dir = "down";
+			}
+			void drawEnemy(){
+				noStroke();
+				fill(0,0,255);
+			  	ellipse(x,y,nWidth,nHeight);
+			}
+			void moveEnemy(){
+				
+				//portals
+				if(x > maze[0].length * cellWidth ){
+					x-= maze[0].length * cellWidth;
+				}else if(x < 0){
+					x+=maze[0].length *cellWidth;
+				}else if(y > maze.length * cellHeight){
+					y -= maze.length *cellHeight;
+				}else if(y<0){
+					y += maze.length* cellHeight;
+				}
+				if(canMove()){
+				//don't move until you know the next space is empty
+				if (dir == "up"){
+					y = y-s;
+				}else if (dir == "down"){
+					y = y +s;
+				}else if (dir == "left"){
+					x = x -s; 
+				}else if(dir == "right"){
+					x = x+s;
+				}
+				}else{
+					var rand = Math.floor(Math.random() * 4) + 1;
+					if (rand == 1){
+						dir = "right";
+					}else if (rand == 2){
+						dir = "left";
+					}else if (rand == 3){
+						dir = "up";
+					}else{
+						dir = "down";
+					}
+				}
+			}
+			
+			boolean canMove(){
+			
+				var canMove = false;
+			
+				var col = Math.floor(x / 20); //cellWidth;
+			  	var row = Math.floor(y / 20); //cellHeight; 
+			  	if(dir =="down" && row+1 < 20){
+			  		if(maze[row+1][col] == 0 || maze[row+1][col] == 2){
+			  			canMove = true;
+			  		}
+			  			
+			  	}
+			  	if(dir == "up" && row-1 >=0){
+			  		if(maze[row-1][col] == 0 || maze[row-1][col] == 2){
+			  			canMove = true;
+			  			
+			  		}
+			  	}
+			  	if(dir == "left" && col -1 >=0 ){
+			  		if(maze[row][col-1] == 0 || maze[row][col-1] == 2){
+			  			canMove = true;
+			  			
+			  		}
+			  	}
+			  	if(dir == "right" && col+1 <20){
+			  		if(maze[row][col+1] == 0 || maze[row][col+1] == 2){
+			  			canMove = true;
+			  			
+			  		}
+			  	}
+			  	
+				return canMove;
+			}
+			
+		
+		
+		}
 		mouseClicked = function(){
 			paused = !paused; 
 		}
+		
+		
 
 		
 		</script>
