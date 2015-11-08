@@ -100,10 +100,10 @@
 			  //noLoop();
 			  PFont fontA = loadFont("courier");
 			  textFont(fontA, 14); 
-			  nick = new Nick(10, 10, 100, 25, 3); 
-			  enemies.push(new Enemy(10, 10, 30, 25, 3));
-			  enemies.push(new Enemy(10, 10, 30, 125, 3));
-			  enemies.push(new Enemy(10, 10, 320, 85, 3));
+			  nick = new Nick(5, 5, 100, 25, 3); 
+			  enemies.push(new Enemy(5, 5, 30, 25, 3));
+			  enemies.push(new Enemy(5, 5, 30, 125, 3));
+			  enemies.push(new Enemy(5, 5, 320, 85, 3));
 			  maze = levels[level];
 
 			  
@@ -216,7 +216,13 @@
 					}
 					paused = true;
 				}
-			  
+				//steven
+				var w = 5;
+var h = 5;
+var x = 100;
+var y = 100;
+
+
 			  
 
 			  
@@ -225,23 +231,39 @@
 		
 		
 		class Nick{
-			var nWidth;
-			var nHeight; 
+			var w;
+			var h; 
 			var x;
 			var y;
 			var s;
 			
-			Nick(w,h,xVal, yVal, speed){
-				nWidth = w;
-				nHeight = h;
+			Nick(nWidth,nHeight,xVal, yVal, speed){
+				w=nWidth;
+				h=nHeight;
 				x = xVal;
 				y=yVal;
 				s = speed;
 			}
 			void drawNick(){
 				noStroke();
-				fill(0,255,0);
-			  	rect(x,y,nWidth,nHeight);
+				fill(0,0,0);
+				ellipse(x,y-4,1.5*w, h);
+				ellipse(x-2,y,1.5*w, h);
+				ellipse(x+6.5,y-6,1.5*w, h);
+				ellipse(x+12,y-5,1.5*w, h);
+				rect(x,y-4,3*w,2*h);
+				fill(245, 196, 214);
+				rect(x,y,3*w,2*h);
+				fill(255, 255, 255);
+				rect(x+2,y,w,h-1);
+				rect(x+9,y,w,h-1);
+				fill(0, 0, 0);
+				rect(x+3,y,w/2.5,h/2);
+				rect(x+10,y,w/2.5,h/2);
+				fill(255, 0, 0);
+				noStroke();
+				rect(x+5,y+5,w*1.5,h*0.3);
+				rect(x+7,y+5,w*0.8,h*0.69);
 			}
 			//called before moveNick 
 			
@@ -337,8 +359,8 @@
 		}
 		class Enemy{
 		
-			var nWidth;
-			var nHeight; 
+			var w;
+			var h;
 			var startX;
 			var startY;
 			var x;
@@ -346,9 +368,9 @@
 			var s;
 			var dir;
 			
-			Enemy(w,h,xVal, yVal, speed){
-				nWidth = w;
-				nHeight = h;
+			Enemy(width,height,xVal, yVal, speed){
+				w=width;
+				h = height;
 				x = xVal;
 				startX = xVal;
 				y=yVal;
@@ -357,9 +379,19 @@
 				dir = "down";
 			}
 			void drawEnemy(){
+			
+				fill(0,0,0);
+				rect(x-3,y-3,4*w,2.5*h);
+				fill(255, 5, 188);
+				rect(x,y,3*w,2*h);
+				fill(250, 215, 250);
+				rect(x+3,y,w*2.3,h-2);
+				line(x+15, y+15, x+15+w*0.8, y+15);
+				fill(255, 0, 0);
+			/*
 				noStroke();
 				fill(0,0,255);
-			  	rect(x,y,nWidth,nHeight);
+			  	rect(x,y,nWidth,nHeight);*/
 			}
 			void moveEnemy(){
 				
@@ -439,32 +471,34 @@
 			paused = !paused; 
 		}
 		
-		/*fiona
+		/*garnet 
+		
 		var w = 10;
 var h = 10;
 var x = 100;
 var y = 100;
 fill(0,0,0);
-rect(x-5,y-5,4*w,2*h);
-fill(175, 230, 92);
+rect(x-5,y-5,4*w,2.5*h);
+fill(255, 5, 188);
 rect(x,y,3*w,2*h);
-fill(255,255,255);
-rect(x+3,y,w,h-2);
-rect(x+17,y,w,h-2);
-fill(0, 0, 0);
-rect(x+7,y,w/2,h/2);
-rect(x+21,y,w/2,h/2);
+fill(250, 215, 250);
+rect(x+3,y,w*2.7,h-2);
+line(x+15, y+15, x+15+w*0.8, y+15);
 fill(255, 0, 0);
-rect(x+15,y+10,w*0.8,h*0.8);
 
-nick
+steven 
+
 var w = 10;
 var h = 10;
 var x = 100;
 var y = 100;
 fill(0,0,0);
-rect(x,y-5,3*w,2*h);
-fill(255,255,0);
+ellipse(x,y-5,1.5*w, h);
+ellipse(x+10,y-10,1.5*w, h);
+ellipse(x+20,y-10,1.5*w, h);
+ellipse(x+30,y-8,1.5*w, h);
+rect(x,y-8,3*w,2*h);
+fill(245, 196, 214);
 rect(x,y,3*w,2*h);
 fill(255, 255, 255);
 rect(x+3,y,w,h-2);
@@ -473,8 +507,49 @@ fill(0, 0, 0);
 rect(x+3,y,w/2,h/2);
 rect(x+17,y,w/2,h/2);
 fill(255, 0, 0);
-rect(x+15,y+10,w*0.8,h*0.8);*/
-		
+noStroke();
+rect(x+11,y+11,w*1.5,h*0.35);
+rect(x+15,y+11,w*0.8,h*0.7);
+
+amythest
+var w = 10;
+var h = 10;
+var x = 100;
+var y = 100;
+fill(250, 230, 250);
+ellipse(x+12, y+5, w*5,h*4);
+fill(224, 171, 237);
+ellipse(x+15,y+10,4*w,3*h);
+fill(255, 255, 255);
+ellipse(x+6,y+5,w,h-2);
+fill(255, 255, 255);
+ellipse(x+26,y+5,w,h-2);
+fill(0, 0, 0);
+rect(x+5,y+2,w/3,h/3);
+rect(x+25,y+2,w/3,h/3);
+fill(250, 230, 250);
+fill(255, 255, 255);
+ellipse(x+20,y+15,w*0.8,h*0.7);
+
+pearl
+var w = 10;
+var h = 10;
+var x = 100;
+var y = 100;
+fill(250, 175, 245);
+triangle(x-14, y-8, x+20,y-4,x,y+20);
+fill(240, 242, 186);
+ellipse(x+15,y+12,3.5*w,3.2*h);
+fill(255, 255, 255);
+ellipse(x+16,y+1,w*0.8,h*0.7);
+ellipse(x+8,y+10,w*0.8,h);
+ellipse(x+24,y+10,w*0.8,h);
+fill(0, 0, 0);
+rect(x+8,y+8,w/3,h/3);
+rect(x+24,y+8,w/3,h/3);
+fill(255, 255, 255);
+ellipse(x+18,y+19,w*0.8,h*0.7);
+*/
 		
 
 		
