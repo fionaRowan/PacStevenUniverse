@@ -11,8 +11,10 @@
 		var paused = true;
 		Nick nick;
 		enemies = new Array();
-		//Enemy enemy;
 		var lives = 3;
+		//initialized to number of 2's in first level
+		var numberOfPoints=197;
+		var level = 0;
 		
 		var pointCounter = 0;
 		
@@ -82,7 +84,7 @@
 			
 			];
 		
-		//first level is initialized to first	
+		//current level
 		var maze;
 		
 		//cell width and cell height
@@ -102,7 +104,7 @@
 			  enemies.push(new Enemy(10, 10, 30, 25, 3));
 			  enemies.push(new Enemy(10, 10, 30, 125, 3));
 			  enemies.push(new Enemy(10, 10, 320, 85, 3));
-			  maze = levels[0];
+			  maze = levels[level];
 
 			  
 			}
@@ -176,8 +178,22 @@
 			  if(!paused && nick.canMove(dir)){
 			  	nick.moveNick(dir);
 			  }
-			  if(pointCounter==193){
-			  	maze = levels[1];
+			  console.log(pointCounter);
+			  
+			  //when collected all points, change levels
+			  if(pointCounter==numberOfPoints){
+			  	if(level+1 < levels.length){
+			  		maze = levels[++level];
+				  	pointCounter = 0;
+				  	if(level ==1){
+				  		numberOfPoints = 201;
+				  	}else{
+			  			//number of points in level 2
+				  		numberOfPoints = 197;
+			  	
+			  	
+			  		}
+			  	}
 			  }
 			  
 			  
@@ -192,6 +208,11 @@
 								maze[i][j]=2;
 							}
 						}
+					}
+					
+					for(int j =0; j<enemies.length; j++){
+						enemies[j].x = enemies[j].startX;
+						enemies[j].y = enemies[j].startY;
 					}
 					paused = true;
 				}
@@ -227,8 +248,8 @@
 			boolean canMove(dir){
 				var canMove = false;
 			
-				var col = Math.floor(x / cellWidth); //cellWidth;
-			  	var row = Math.floor(y / cellHeight); //cellHeight; 
+				var col = Math.floor(x / cellWidth); 
+			  	var row = Math.floor(y / cellHeight);
 			  	if(dir =="down" && row+1 < 20){
 			  		if(maze[row+1][col] == 0 || maze[row+1][col] == 2){
 			  			canMove = true;
@@ -318,6 +339,8 @@
 		
 			var nWidth;
 			var nHeight; 
+			var startX;
+			var startY;
 			var x;
 			var y;
 			var s;
@@ -327,7 +350,9 @@
 				nWidth = w;
 				nHeight = h;
 				x = xVal;
+				startX = xVal;
 				y=yVal;
+				startY=yVal;
 				s = speed;
 				dir = "down";
 			}
