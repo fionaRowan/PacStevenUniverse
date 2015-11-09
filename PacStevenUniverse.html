@@ -9,6 +9,7 @@
 		var height = 400;
 		var dir = "down"; 
 		var paused = true;
+		var start = true;
 		Nick nick;
 		enemies = new Array();
 		var lives = 3;
@@ -93,11 +94,9 @@
 
 			void setup()
 			{
-			
+				background(244,29,155);
 			  size(width,height);
-			  background(125);
 			  fill(255);
-			  //noLoop();
 			  PFont fontA = loadFont("courier");
 			  textFont(fontA, 14); 
 			  nick = new Nick(5, 5, 100, 25, 3); 
@@ -105,23 +104,44 @@
 			  enemies.push(new Enemy(5, 5, 30, 125, 3));
 			  enemies.push(new Enemy(5, 5, 320, 85, 3));
 			  maze = levels[level];
-			  buildMaze();
 			  nick.drawNick();
-			  for(int i = 0; i<enemies.length; i++){
+			  /*for(int i = 0; i<enemies.length; i++){
 			  	enemies[i].drawEnemy();
-			  }
+			  }*/
 			  noLoop();
 
 			  
 			}
 
 			void draw(){  
+			
+				//when collected all points, change levels
+			  if(pointCounter==numberOfPoints){
+			  	if(level+1 < levels.length){
+			  		maze = levels[++level];
+				  	pointCounter = 0;
+				  	if(level ==1){
+				  		numberOfPoints = 201;
+				  	}else{
+			  			//number of points in level 2
+				  		numberOfPoints = 197;
+			  	
+			  	
+			  		}
+			  	}
+			  }
+			  
 			 
 			  //build the maze
 			  background(125);
 			  buildMaze();
-			  nick.drawNick();
+			  
 			  activateEnemies();
+			  if(start==true){
+			  	love();
+			  	start = false;
+			  	}
+			  	nick.drawNick();
 			  
 			  //detect key,and decide direction
 			  if(keyPressed==true){
@@ -140,10 +160,11 @@
 			  	nick.moveNick(dir);
 			  }
 			  if(lives == 0){
-					lives = 3;
 					maze = levels[0];
 					maze[0][19] = 3;
 					maze[0][18] = 3;
+					pointCounter = 0;
+					numberOfPoints=197;
 					for(int i = 0; i<maze.length; i++){
 						for(int j = 0; j<maze.length; j++){
 							if(maze[i][j] ==0){
@@ -158,38 +179,69 @@
 					}
 					buildMaze();
 					activateEnemies();
+					love();
 					nick.drawNick();
 					paused = true;
 					noLoop();
+					lives = 3;
 				}
 			  
-			  
-			  
-			  
-			  
-			  //only move if not touching wall
-			  
-			  //when collected all points, change levels
-			  if(pointCounter==numberOfPoints){
-			  	if(level+1 < levels.length){
-			  		maze = levels[++level];
-				  	pointCounter = 0;
-				  	if(level ==1){
-				  		numberOfPoints = 201;
-				  	}else{
-			  			//number of points in level 2
-				  		numberOfPoints = 197;
-			  	
-			  	
-			  		}
-			  	}
-			  }
 			  
 			  
 				
 
 		}
 		
+		function love(){
+			background(244,29,155);
+			noStroke();
+			fill(255,255,255);
+			//I
+			rect(10,40,10,100);
+			//L
+			rect(50,40,10,100);
+			rect(50,130,45,10);
+
+			//O
+			rect(100,40,10,100);
+			rect(135,40,10,100);
+			rect(100,130,40,10);
+			rect(100,40,40,10);
+
+			//V
+			rect(160,40,10,100);
+			rect(185,40,10,100);
+			rect(160,130,30,10);
+
+			//E
+			rect(210,40,10,100);
+			rect(210,130,40,10);
+			rect(210,40,40,10);
+			rect(210,85,30,10);
+
+			//Y
+			rect(65,240,10,100);
+			rect(30,330,40,10);
+			rect(30,290,40,10);
+			rect(30,240,10,60);
+
+			//O
+			rect(100,240,10,100);
+			rect(135,240,10,100);
+			rect(100,330,40,10);
+			rect(100,240,40,10);
+
+			//U
+			rect(160,240,10,100);
+			rect(195,240,10,100);
+			rect(160,330,40,10);
+
+			//!
+			rect(230,240,10,80);
+			rect(230,330,10,10);
+
+
+		}
 		
 		function activateEnemies(){
 			for(int i = 0; i<enemies.length; i++){
@@ -253,6 +305,8 @@
 			var h; 
 			var x;
 			var y;
+			var startX;
+			var startY;
 			var s;
 			
 			Nick(nWidth,nHeight,xVal, yVal, speed){
@@ -260,6 +314,8 @@
 				h=nHeight;
 				x = xVal;
 				y=yVal;
+				startX = x;
+				startY=y;
 				s = speed;
 			}
 			void drawNick(){
@@ -362,8 +418,8 @@
 			}
 			void die(){
 				lives--;
-				x=60;
-				y = 30;
+				x=startX;
+				y = startY;
 				dir="right";
 				if (lives == 2){
 					maze[0][19]=1;
