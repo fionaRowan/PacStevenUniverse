@@ -121,6 +121,7 @@
 			}
 
 			void draw(){  
+
 				//when collected all points, change levels
 			  if(pointCounter==numberOfPoints){
 			  	if(level+1 < levels.length){
@@ -140,8 +141,18 @@
 			  				maze[0][18] = 1;
 			  			}
 			  		}
-			  	}else{ //win screen
-			  		love();
+			  	}else{ //win screen, and set up for 
+					lives =0;
+					//start screen
+					love();
+					
+					//steven drawn over start screen
+					steven.drawSteven();
+					
+					//pause game
+					paused = true;
+					start=true;
+					noLoop();
 			  	}
 			  }
 			  
@@ -207,16 +218,12 @@
 					noLoop();
 					lives = 3;
 				}
-			  
-			  
-			  
-				
 
 		}
 		
 		//lovey dovey start screen
 		function love(){
-			background(244,29,155);/*
+			background(244,29,155);
 			noStroke();
 			fill(255,255,255);
 			//I
@@ -261,7 +268,7 @@
 
 			//!
 			rect(230,240,10,80);
-			rect(230,330,10,10);*/
+			rect(230,330,10,10);
 
 
 		}
